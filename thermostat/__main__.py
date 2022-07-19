@@ -1,8 +1,9 @@
 """
 Entrypoint
 """
+import time
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
 from displayhatmini import DisplayHATMini
 from PIL import Image, ImageDraw, ImageFont
@@ -11,6 +12,8 @@ from PIL import Image, ImageDraw, ImageFont
 class State:
     _brightness: float = 1.0
     _power_saving_mode_enabled: bool = False
+
+    led_colour: Tuple[float, float, float] = (0.1, 0.1, 0.1)
 
     @property
     def brightness(self):
@@ -70,17 +73,28 @@ class Window(WindowObject):
 
 
 class Renderer:
-    def __init__(self):
+    def __init__(self, state: State):
+        self.state = state
         self.image = Image.new("RGB", (DisplayHATMini.WIDTH, DisplayHATMini.HEIGHT))
+        self.display = DisplayHATMini(self.image, backlight_pwm=False)
         self.window = Window(self.image)
 
     def init(self):
         """"""
+        self.set_brightness()
         self.window.init()
+        self.display.display()
+
+    def set_brightness(self):
+        """"""
+        self.display.set_backlight(self.state.brightness)
+        self.display.set_led(self.state.led_colour)
 
     def render(self):
         try:
-            return self.window.render()
+            self.window.render()
+            self.display.display()
+
         except Exception:
             print("Failed to draw window")
             return False
@@ -90,6 +104,9 @@ if __name__ == "__main__":
     state = State()
 
     image = Image.new("RGB", (DisplayHATMini.WIDTH, DisplayHATMini.HEIGHT))
-    renderer = Renderer()
+    renderer = Renderer(state)
     renderer.init()
-    renderer.render()
+
+    while True:
+        renderer.render()
+        time.sleep(0.5)
