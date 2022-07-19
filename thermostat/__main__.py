@@ -13,7 +13,7 @@ class State:
     _brightness: float = 1.0
     _power_saving_mode_enabled: bool = False
 
-    led_colour: Tuple[float, float, float] = (0.1, 0.1, 0.1)
+    led_colour: Tuple[float, float, float] = (0.05, 0.05, 0.05)
 
     @property
     def brightness(self):
@@ -70,6 +70,11 @@ class Window(WindowObject):
             ),
             (50, 50, 50),
         )
+
+
+class Menu(WindowObject):
+    def __init__(self):
+        """"""
 
 
 class Renderer:
