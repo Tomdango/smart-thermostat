@@ -108,7 +108,7 @@ class Menu(WindowObject):
                 continue
 
             self.draw.rectangle(
-                self._calculate_coordinates(margin=20, height=30, offset_y=30 * index),
+                self._calculate_coordinates(margin=20, height=30, offset_y=40 * index),
                 (175, 175, 175),
             )
 
