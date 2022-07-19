@@ -10,6 +10,8 @@ from typing import List, Tuple
 from displayhatmini import DisplayHATMini
 from PIL import Image, ImageDraw, ImageFont
 
+ARIAL = ImageFont.truetype("arial.ttf", 20)
+
 
 class State:
     _brightness: float = 1.0
@@ -107,9 +109,10 @@ class Menu(WindowObject):
                     self._calculate_coordinates(margin=20, height=30), (50, 50, 50)
                 )
                 self.draw.text(
-                    self._calculate_coordinates(margin=20, height=30)[:2],
+                    self._calculate_coordinates(margin=25, height=30)[:2],
                     item,
                     fill=(255, 255, 255),
+                    font=ARIAL,
                 )
                 continue
 
@@ -118,9 +121,12 @@ class Menu(WindowObject):
                 (5, 5, 5),
             )
             self.draw.text(
-                self._calculate_coordinates(margin=20, height=30, offset_y=40 * index)[:2],
+                self._calculate_coordinates(margin=25, height=30, offset_y=40 * index)[
+                    :2
+                ],
                 item,
                 fill=(255, 255, 255),
+                font=ARIAL,
             )
 
 
