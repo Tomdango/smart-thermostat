@@ -3,6 +3,7 @@ Entrypoint
 """
 import time
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 from typing import List, Tuple
 
 from displayhatmini import DisplayHATMini
@@ -42,6 +43,28 @@ class WindowObject(ABC):
     def render(self):
         raise NotImplementedError()
 
+    def _calculate_coordinates(
+        self, margin: int = 0, height: int = -1, offset_y: int = -1
+    ):
+
+        coords = OrderedDict(
+            min_x=self.MIN_WIDTH + margin,
+            min_y=self.MIN_HEIGHT + margin,
+            max_x=self.MAX_WIDTH - margin,
+            max_y=self.MAX_HEIGHT - margin,
+        )
+
+        if height != -1:
+            coords.update(max_y=self.MIN_HEIGHT + margin + height)
+
+        if offset_y != -1:
+            coords.update(
+                min_y=coords.get("min_y") + offset_y,
+                max_y=coords.get("max_y") + offset_y,
+            )
+
+        return coords.values()
+
 
 class Window(WindowObject):
     _children: List[WindowObject] = []
@@ -53,28 +76,41 @@ class Window(WindowObject):
         for child in self._children:
             child.render()
 
+    def add_child(self, child: WindowObject):
+        self._children.append(child)
+
     def _render_background(self):
         """Render the basic background"""
         # Render
         self.draw.rectangle(
-            (self.MIN_WIDTH, self.MIN_HEIGHT, self.MAX_WIDTH, self.MAX_HEIGHT),
+            self._calculate_coordinates(),
             (180, 0, 0),
             width=10,
         )
         self.draw.rectangle(
-            (
-                self.MIN_WIDTH + 10,
-                self.MIN_HEIGHT + 10,
-                self.MAX_WIDTH - 10,
-                self.MAX_HEIGHT - 10,
-            ),
+            self._calculate_coordinates(margin=10),
             (50, 50, 50),
         )
 
 
 class Menu(WindowObject):
-    def __init__(self):
-        """"""
+    # def __init__(self, position: Tuple[int, int, int, int]):
+    # """"""
+
+    def render(self):
+        items = ["Living Room", "Hallway", "Bedroom"]
+
+        for index, item in enumerate(items):
+            if index == 1:
+                self.draw.rectangle(
+                    self._calculate_coordinates(margin=30, height=20), (255, 255, 255)
+                )
+                continue
+
+            self.draw.rectangle(
+                self._calculate_coordinates(margin=30, height=20, offset_y=20 * index),
+                (175, 175, 175),
+            )
 
 
 class Renderer:
@@ -83,6 +119,8 @@ class Renderer:
         self.image = Image.new("RGB", (DisplayHATMini.WIDTH, DisplayHATMini.HEIGHT))
         self.display = DisplayHATMini(self.image, backlight_pwm=False)
         self.window = Window(self.image)
+
+        self.window.add_child(Menu(self.image))
 
     def init(self):
         """"""
