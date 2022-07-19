@@ -88,7 +88,7 @@ class Renderer:
     def set_brightness(self):
         """"""
         self.display.set_backlight(self.state.brightness)
-        self.display.set_led(self.state.led_colour)
+        self.display.set_led(*self.state.led_colour)
 
     def render(self):
         try:
