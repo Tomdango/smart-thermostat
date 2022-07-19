@@ -63,7 +63,7 @@ class WindowObject(ABC):
                 max_y=coords.get("max_y") + offset_y,
             )
 
-        return coords.values()
+        return tuple(coords.values())
 
 
 class Window(WindowObject):
