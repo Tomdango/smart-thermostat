@@ -101,14 +101,14 @@ class Menu(WindowObject):
         items = ["Living Room", "Hallway", "Bedroom"]
 
         for index, item in enumerate(items):
-            if index == 1:
+            if index == 0:
                 self.draw.rectangle(
                     self._calculate_coordinates(margin=30, height=20), (255, 255, 255)
                 )
                 continue
 
             self.draw.rectangle(
-                self._calculate_coordinates(margin=30, height=20, offset_y=20 * index),
+                self._calculate_coordinates(margin=30, height=20, offset_y=22 * index),
                 (175, 175, 175),
             )
 
