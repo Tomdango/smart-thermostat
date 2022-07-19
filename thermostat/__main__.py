@@ -103,13 +103,23 @@ class Menu(WindowObject):
         for index, item in enumerate(items):
             if index == 0:
                 self.draw.rectangle(
-                    self._calculate_coordinates(margin=20, height=30), (255, 255, 255)
+                    self._calculate_coordinates(margin=20, height=30), (50, 50, 50)
+                )
+                self.draw.text(
+                    self._calculate_coordinates(margin=20, height=30),
+                    item,
+                    fill=(255, 255, 255),
                 )
                 continue
 
             self.draw.rectangle(
                 self._calculate_coordinates(margin=20, height=30, offset_y=40 * index),
-                (175, 175, 175),
+                (5, 5, 5),
+            )
+            self.draw.text(
+                self._calculate_coordinates(margin=20, height=30, offset_y=40 * index),
+                item,
+                fill=(255, 255, 255),
             )
 
 

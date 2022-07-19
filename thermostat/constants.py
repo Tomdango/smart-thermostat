@@ -1,3 +1,3 @@
 class Colours:
-    BACKGROUND = (25, 25, 25)
-    BACKGROUND_BORDER = (180, 0, 0)
+    BACKGROUND = (0, 0, 0)
+    BACKGROUND_BORDER = (25, 25, 25)
