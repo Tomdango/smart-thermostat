@@ -2,6 +2,7 @@
 Entrypoint
 """
 import time
+import traceback
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from typing import List, Tuple
@@ -106,7 +107,7 @@ class Menu(WindowObject):
                     self._calculate_coordinates(margin=20, height=30), (50, 50, 50)
                 )
                 self.draw.text(
-                    self._calculate_coordinates(margin=20, height=30),
+                    self._calculate_coordinates(margin=20, height=30)[:2],
                     item,
                     fill=(255, 255, 255),
                 )
@@ -117,7 +118,7 @@ class Menu(WindowObject):
                 (5, 5, 5),
             )
             self.draw.text(
-                self._calculate_coordinates(margin=20, height=30, offset_y=40 * index),
+                self._calculate_coordinates(margin=20, height=30, offset_y=40 * index)[:2],
                 item,
                 fill=(255, 255, 255),
             )
@@ -148,8 +149,9 @@ class Renderer:
             self.window.render()
             self.display.display()
 
-        except Exception:
+        except Exception as exception:
             print("Failed to draw window")
+            traceback.print_exception(exception)
             return False
 
 
